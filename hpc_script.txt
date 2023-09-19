@@ -1,0 +1,28 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu 
+#SBATCH --gres=gpu:p100:2
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=40GB
+#SBATCH --time=48:00:00
+#SBATCH --account=nevatia_174
+
+
+module purge
+module load gcc/8.3.0
+#module load cuda/10.1.243
+#./program
+
+cd /project/nevatia_174/zhuoming/code/actionformer_release
+
+source /home1/liuzhuom/.bashrc
+source activate actionform
+
+#python tools/lazyconfig_train_net.py --config-file projects/ViTDet/configs/COCO/mask_rcnn_vitdet_b_100ep_from_clip.py --num-gpus 2
+
+cd ./libs/utils
+python setup.py install --user
+cd ../..
+
+python ./train.py ./configs/anet_tsp.yaml --output reproduce
